@@ -10,6 +10,7 @@ from roadmap_karir import roadmap
 from skill_karir import skill_karir
 from sertifikasi_karir import sertifikasi_karir
 from peluang_kerja import peluang_kerja
+import database
 
 
 

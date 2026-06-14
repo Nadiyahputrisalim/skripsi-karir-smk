@@ -1,23 +1,29 @@
 import sqlite3
 
-if not st.session_state.hasil_disimpan:
+conn = sqlite3.connect("siswa.db")
 
-    conn = sqlite3.connect("siswa.db")
-    c = conn.cursor()
+c = conn.cursor()
 
-    c.execute("""
-    INSERT INTO hasil_ai
-    (nama,jurusan,rekomendasi,persentase)
-    VALUES (?,?,?,?)
-    """,
-    (
-        st.session_state.nama,
-        st.session_state.jurusan,
-        hasil_ai,
-        persen_utama
-    ))
+# tabel hasil AI
+c.execute("""
+CREATE TABLE IF NOT EXISTS hasil_ai (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nama TEXT,
+    jurusan TEXT,
+    rekomendasi TEXT,
+    persentase REAL
+)
+""")
 
-    conn.commit()
-    conn.close()
+# tabel feedback
+c.execute("""
+CREATE TABLE IF NOT EXISTS feedback (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nama TEXT,
+    rating INTEGER,
+    komentar TEXT
+)
+""")
 
-    st.session_state.hasil_disimpan = True
+conn.commit()
+conn.close()
