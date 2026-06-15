@@ -737,7 +737,236 @@ elif st.session_state.step == 3:
 
             st.session_state.step = 4
             st.rerun()
+# =====================================
+# STEP 4 - HASIL AI
+# =====================================
 
+elif st.session_state.step == 4:
+
+    st.title("🤖 Hasil Analisis AI")
+    st.progress(4/11)
+
+    jawaban = st.session_state.jawaban_wawancara
+
+    if jawaban == "":
+        st.warning("Silakan isi wawancara terlebih dahulu.")
+
+    else:
+
+        hasil_ai = prediksi_karir(jawaban)
+        detail = prediksi_detail(jawaban)
+
+        persen_utama = round(detail[0][1] * 100, 2)
+
+        st.session_state.hasil_ai = hasil_ai
+        st.session_state.persentase_ai = persen_utama
+
+        st.success(
+            f"🎯 Rekomendasi Utama : {hasil_ai}"
+        )
+
+        st.markdown(f"""
+        <div style="
+        background:linear-gradient(90deg,#1f4e79,#4a90e2);
+        padding:25px;
+        border-radius:20px;
+        text-align:center;
+        color:white;
+        margin-bottom:20px;
+        ">
+        <h1>{hasil_ai}</h1>
+        <h2>{persen_utama}%</h2>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # ==========================
+        # SIMPAN HASIL AI
+        # ==========================
+
+        if not st.session_state.hasil_disimpan:
+
+            conn = sqlite3.connect("siswa.db")
+            c = conn.cursor()
+
+            c.execute("""
+            INSERT INTO hasil_ai
+            (nama,jurusan,rekomendasi,persentase)
+            VALUES (?,?,?,?)
+            """,
+            (
+                st.session_state.nama,
+                st.session_state.jurusan,
+                hasil_ai,
+                persen_utama
+            ))
+
+            conn.commit()
+            conn.close()
+
+            st.session_state.hasil_disimpan = True
+
+        # ==========================
+        # TOP 3 KARIR
+        # ==========================
+
+        st.subheader("🏆 Top 3 Rekomendasi Karir")
+
+        for pekerjaan, nilai in detail[:3]:
+
+            persen = round(nilai * 100, 2)
+
+            st.info(
+                f"{pekerjaan} - {persen}%"
+            )
+
+            st.progress(min(int(persen), 100))
+
+        # ==========================
+        # ANALISIS AI
+        # ==========================
+
+        st.subheader("🧠 Analisis AI")
+
+        st.info(
+            f"Berdasarkan hasil wawancara, sistem merekomendasikan karir sebagai {hasil_ai} dengan tingkat kecocokan {persen_utama}%."
+        )
+
+        # ==========================
+        # ROADMAP KARIR
+        # ==========================
+
+        if hasil_ai in roadmap:
+
+            st.subheader("🗺 Roadmap Karir")
+
+            for i, item in enumerate(
+                roadmap[hasil_ai],
+                start=1
+            ):
+                st.write(f"{i}. {item}")
+
+        else:
+
+            st.warning(
+                f"Roadmap untuk {hasil_ai} belum tersedia."
+            )
+
+        # ==========================
+        # PROFIL KARIR
+        # ==========================
+
+        if hasil_ai in karir_info:
+
+            info = karir_info[hasil_ai]
+
+            st.subheader("📚 Profil Karir")
+
+            st.write(info["deskripsi"])
+
+            st.subheader("🛠 Skill yang Dibutuhkan")
+
+            for skill in info["skill"]:
+                st.write(f"✅ {skill}")
+
+            st.subheader("🚀 Prospek Karir")
+
+            for prospek in info["prospek"]:
+                st.write(f"➡ {prospek}")
+
+        # ==========================
+        # SKILL REKOMENDASI
+        # ==========================
+
+        if hasil_ai in skill_karir:
+
+            st.subheader(
+                "🎓 Skill yang Direkomendasikan"
+            )
+
+            for skill in skill_karir[hasil_ai]:
+                st.write(f"✅ {skill}")
+
+        # ==========================
+        # SERTIFIKASI
+        # ==========================
+
+        if hasil_ai in sertifikasi_karir:
+
+            st.subheader(
+                "🏅 Sertifikasi yang Direkomendasikan"
+            )
+
+            for sertifikat in sertifikasi_karir[hasil_ai]:
+                st.write(f"🎖 {sertifikat}")
+
+        # ==========================
+        # PELUANG PEKERJAAN
+        # ==========================
+
+        if hasil_ai in peluang_kerja:
+
+            st.subheader(
+                "💼 Peluang Pekerjaan"
+            )
+
+            for pekerjaan in peluang_kerja[hasil_ai]:
+                st.info(f"💼 {pekerjaan}")
+
+        # ==========================
+        # GRAFIK
+        # ==========================
+
+        st.subheader(
+            "📊 Grafik Rekomendasi Karir"
+        )
+
+        karir = []
+        persentase = []
+
+        for pekerjaan, nilai in detail[:5]:
+
+            karir.append(pekerjaan)
+
+            persentase.append(
+                round(nilai * 100, 2)
+            )
+
+        fig, ax = plt.subplots()
+
+        ax.bar(
+            karir,
+            persentase
+        )
+
+        ax.set_ylabel("Persentase (%)")
+
+        ax.set_title(
+            "Hasil Prediksi Karir AI"
+        )
+
+        plt.xticks(rotation=20)
+
+        st.pyplot(fig)
+
+        # ==========================
+        # BUTTON
+        # ==========================
+
+        if st.button(
+            "📄 Buat CV Profesional",
+            use_container_width=True
+        ):
+
+            st.session_state.step = 5
+            st.rerun()
+
+        if st.button(
+            "🏢 Lihat Rekomendasi Magang",
+            use_container_width=True
+        ):
+
+            st.session_state.step = 10
+            st.rerun()
 
 
 
