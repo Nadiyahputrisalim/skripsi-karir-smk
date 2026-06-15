@@ -1,38 +1,37 @@
 import sqlite3
 
-conn = sqlite3.connect("siswa.db")
-c = conn.cursor()
+def init_db():
 
-# Tabel users
-c.execute("""
-CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nama TEXT,
-    email TEXT,
-    password TEXT
-)
-""")
+    conn = sqlite3.connect("siswa.db")
+    c = conn.cursor()
 
-# Tabel hasil AI
-c.execute("""
-CREATE TABLE IF NOT EXISTS hasil_ai (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nama TEXT,
-    jurusan TEXT,
-    rekomendasi TEXT,
-    persentase REAL
-)
-""")
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nama TEXT,
+        email TEXT UNIQUE,
+        password TEXT
+    )
+    """)
 
-# Tabel feedback
-c.execute("""
-CREATE TABLE IF NOT EXISTS feedback (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nama TEXT,
-    rating INTEGER,
-    komentar TEXT
-)
-""")
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS hasil_ai (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nama TEXT,
+        jurusan TEXT,
+        rekomendasi TEXT,
+        persentase REAL
+    )
+    """)
 
-conn.commit()
-conn.close()
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS feedback (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nama TEXT,
+        rating INTEGER,
+        komentar TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
