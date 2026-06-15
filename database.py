@@ -15,6 +15,16 @@ def init_db():
     """)
 
     c.execute("""
+    CREATE TABLE IF NOT EXISTS siswa (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nama TEXT,
+        jurusan TEXT,
+        umur INTEGER,
+        skill TEXT
+    )
+    """)
+
+    c.execute("""
     CREATE TABLE IF NOT EXISTS hasil_ai (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nama TEXT,
