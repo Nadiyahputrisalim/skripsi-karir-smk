@@ -33,34 +33,19 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-/* Input Text */
-.stTextInput input {
-    background-color: white !important;
-    color: black !important;
+[data-testid="stTextInput"] input{
+    background:white !important;
+    color:black !important;
 }
 
-/* Text Area */
-.stTextArea textarea {
-    background-color: white !important;
-    color: black !important;
+[data-testid="stTextArea"] textarea{
+    background:white !important;
+    color:black !important;
 }
 
-/* Select Box */
-.stSelectbox div[data-baseweb="select"] {
-    background-color: white !important;
-    color: black !important;
-}
-
-/* Number Input */
-.stNumberInput input {
-    background-color: white !important;
-    color: black !important;
-}
-
-/* Label */
-label {
-    color: #1f2937 !important;
-    font-weight: 600;
+[data-testid="stNumberInput"] input{
+    background:white !important;
+    color:black !important;
 }
 
 </style>
