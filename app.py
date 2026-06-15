@@ -34,16 +34,19 @@ st.markdown("""
 <style>
 
 .stApp{
-    background-color: #ffffff;
+    background-color: #eaf4ff;
 }
 
-.main{
-    color: black;
+p, div, span, label {
+    color: #111827 !important;
+}
+
+h1, h2, h3, h4 {
+    color: #0f172a !important;
 }
 
 </style>
 """, unsafe_allow_html=True)
-
 # =====================================
 # CUSTOM CSS
 # =====================================
