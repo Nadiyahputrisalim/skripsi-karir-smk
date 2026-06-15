@@ -33,12 +33,12 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-.stApp{
+[data-testid="stAppViewContainer"]{
     background: linear-gradient(
         135deg,
-        #f8fbff,
-        #e8f1ff,
-        #dbeafe
+        #dbeafe,
+        #bfdbfe,
+        #93c5fd
     );
 }
 
